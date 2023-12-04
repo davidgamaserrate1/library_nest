@@ -13,6 +13,10 @@ export class BookService {
     async saveBook(newBook: BookDTO) : Promise<Book> {
         return await this.bookRepository.saveBook(newBook);
     }
+    
+    async getAllBooks() : Promise<Book[]> {
+        return await this.bookRepository.getAllBooks();
+    }
 
 
 }
