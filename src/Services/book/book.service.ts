@@ -1,4 +1,4 @@
- import { Injectable } from '@nestjs/common';
+ import { BadRequestException, Injectable } from '@nestjs/common';
 import { BookDTO } from 'src/DTO/Book.dto';
 import { Book } from 'src/Mongo/Interfaces/book.interface';
 import { BookRepository } from 'src/Mongo/Repository/book.repository';
@@ -15,7 +15,20 @@ export class BookService {
     }
     
     async getAllBooks() : Promise<Book[]> {
-        return await this.bookRepository.getAllBooks();
+        const allBooks =  await this.bookRepository.getAllBooks();
+
+        if (!allBooks.length ) 
+             throw new BadRequestException('Não existem livros cadastrados') 
+        return allBooks    
+    }
+
+    async getBookById(id: String) : Promise<Book> {
+        try{            
+            return  await this.bookRepository.getBookById(id)  
+        }catch(error){
+
+            throw new BadRequestException('Nenhum resultado')
+        }
     }
 
 
