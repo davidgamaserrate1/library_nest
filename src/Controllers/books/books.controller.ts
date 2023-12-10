@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { BookDTO } from 'src/DTO/Book.dto';
 import { Book } from 'src/Mongo/Interfaces/book.interface';
 import { BookService } from 'src/Services/book/book.service';
@@ -11,8 +11,13 @@ export class BooksController {
     ) {}
 
     @Get()
-    getAllBooks():string{
-        return 'Livros'
+    getAllBooks(): Promise<Book[]>{
+        return this.booksService.getAllBooks();
+    }
+
+    @Get(':bookID')
+    async getBookById(@Param('bookID') bookId: string): Promise<Book>{
+        return await this.booksService.getBookById(bookId)
     }
 
     @Post()
@@ -20,13 +25,13 @@ export class BooksController {
         return await this.booksService.saveBook(newBook);
     }
 
-    @Put()
-    updateBook():string{
-        return 'Livro atualizado'
+    @Put(':bookID')
+    updateBook(@Param('bookID') bookID : string, @Body() newBook: BookDTO) {
+        return this.booksService.updateBookById(bookID, newBook)
     }
 
-    @Delete()
-    deleteBook():string{
-        return 'Livro apagado'
+    @Delete(':bookID')
+    async deleteBookById(@Param('bookID') bookID:string) {
+        return  await this.booksService.deleteBookById(bookID)
     }
 }

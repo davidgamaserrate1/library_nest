@@ -24,7 +24,38 @@ export class BookService {
 
     async getBookById(id: String) : Promise<Book> {
         try{            
-            return  await this.bookRepository.getBookById(id)  
+            const existBook =  await this.bookRepository.getBookById(id)  
+
+            if (! existBook)
+                throw new BadRequestException('Nenhum resultado')
+
+            return existBook
+
+        }catch(error){
+
+            throw new BadRequestException('Nenhum resultado')
+        }
+    }
+
+    async updateBookById(bookID: string, newBook:BookDTO){
+        try{            
+            const existBook = await this.bookRepository.updateBookById(bookID, newBook) 
+            
+            if (! existBook)
+                throw new BadRequestException('Nenhum resultado')
+            
+                return existBook
+
+        }catch(error){
+
+            throw new BadRequestException('Nenhum resultado')
+        }
+       
+    }
+
+    async deleteBookById(bookID: string)  {
+        try{            
+            return await this.bookRepository.deleteBookById(bookID)
         }catch(error){
 
             throw new BadRequestException('Nenhum resultado')
